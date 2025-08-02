@@ -148,7 +148,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/status/**").permitAll()
                 .requestMatchers("/health/**").permitAll()
                 .requestMatchers("/info/**").permitAll()
-                .requestMatchers("/h2-console/**").denyAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/admin/**").access(getWebExpressionAuthorizationManager("hasRole('ADMIN_ROLE') and isAuthenticated()"))
                 .anyRequest().access(getWebExpressionAuthorizationManager("@webAuthnSecurityExpression.isWebAuthnAuthenticated(authentication) || hasAuthority('SINGLE_FACTOR_AUTHN_ALLOWED')"))
         );
@@ -172,7 +172,7 @@ public class WebSecurityConfig {
         http.csrf(customizer ->{
             customizer.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler);
             customizer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-            customizer.ignoringRequestMatchers("/webauthn/**");
+            customizer.ignoringRequestMatchers("/webauthn/**", "/h2-console/**");
         });
 
         return http.build();
